@@ -21,8 +21,9 @@
  * Manage cooldowns for keywords
  *
  * To use the cooldown in other scipts use the $.coolDownKeywords API
+ * This module sets the cooldown for keywords
  */
-
+ 
 (function() {
     var modCooldown = $.getIniDbBoolean('cooldownSettings', 'modCooldown', false),
         cooldown = [];
@@ -31,6 +32,7 @@
      * @function permCheck
      * @param username
      * @return boolean
+     * Сheck username against cooldown requirement
      */
     function permCheck(username) {
         return (!modCooldown && $.isMod(username)) || $.isAdmin(username);
@@ -40,6 +42,7 @@
      * @function getCooldown
      * @param keyword
      * @return number
+     * Check if the message contains a keyword
      */
     function getCooldown(keyword) {
         if ($.inidb.exists('coolkey', keyword.toLowerCase())) {
@@ -57,6 +60,7 @@
      * @param keyword
      * @param time
      * @param username
+     * Assign a keyword cooldown to a user by username
      */
     function set(keyword, hasCooldown, time, username) {
         if (time == null || time == 0 || time == 1 || isNaN(time)) {
@@ -79,11 +83,14 @@
      * @param keyword
      * @param username
      * @return number
+     * Check if there is a keyword cooldown by username
      */
     function get(keyword, username) {
         var hasCooldown = $.inidb.exists('coolkey', keyword.toLowerCase()) || $.inidb.exists('coolkey', keyword), // ignore case.
             i;
-
+/*
+* If there is no cooldown, the function will return 0 value
+*/
         if (!hasCooldown)
             return 0;
 
@@ -104,6 +111,7 @@
      * @function clear
      * @export $.coolDownKeywords
      * @param keyword
+     * If the user enters the ignore case, remove the user's "cooldown" from the array
      */
     function clear(keyword) {
         var i;
@@ -117,6 +125,7 @@
 
     /**
      * @function clearAll
+     * Remove all elements from the cooldown array. Remove all cooldowns
      */
     function clearAll() {
         var i;
